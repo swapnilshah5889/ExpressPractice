@@ -3,14 +3,16 @@ const app = express();
 const port = 3000;
 
 
-// Root URL
-app.get('/', (req, res) => {
+function handleRootURL(req, res) {
     res.send('Hello, World!');
-});
+};
 
 
-// Get Request with Params and JSON Response
-app.get('/search', (req, res) => {
+function onServerStart() {
+    console.log('Server is running on http://localhost:'+port);
+}
+
+function handleSearchRequest(req, res) {
     let response = {'data':{}};
     for(key in req.query) {
         console.log(key + " : " + req.query[key]);
@@ -18,9 +20,13 @@ app.get('/search', (req, res) => {
     }
     response['status'] = true;
     res.json(response);
-});
-  
+}
+
+// Get Request with Params and JSON Response
+app.get('/search', handleSearchRequest);
+
+// Root URL
+app.get('/', handleRootURL);
+
 // Start the server
-app.listen(port, () => {
-    console.log('Server is running on http://localhost:'+port);
-});
+app.listen(port, onServerStart);
