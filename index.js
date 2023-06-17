@@ -22,6 +22,23 @@ function handleSearchRequest(req, res) {
     res.json(response);
 }
 
+function handleSumOfNIntegers(req, res) {
+    if('counter' in req.query) {
+        let n = req.query.counter;
+        let sum = 0;
+        for( let i=1; i<=n; i++ ) {
+            sum += i;
+        }
+        res.json({status:true, msg:'Success', data:{'sum':sum}});
+    }
+    else {
+        res.json({status:false, msg:'bad request'});
+    }
+}
+
+//Calculate sum of first N integers
+app.get('/GetSum', handleSumOfNIntegers);
+
 // Get Request with Params and JSON Response
 app.get('/search', handleSearchRequest);
 
