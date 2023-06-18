@@ -1,5 +1,13 @@
 const express = require('express');
+
 const app = express();
+// Middleware to parse JSON and URL-encoded bodies
+// const bodyParser = require('body-parser');  
+// app.use(bodyParser.urlencoded({ extended: false })); // Handle xxx-form-urlencoded data in post request
+// app.use(bodyParser.json()) // Handle json data in post request
+const multer = require('multer'); // Handle form-data in post request
+const upload = multer();
+
 const port = 3000;
 
 
@@ -23,8 +31,10 @@ function handleSearchRequest(req, res) {
 }
 
 function handleSumOfNIntegers(req, res) {
-    if('counter' in req.query) {
-        let n = req.query.counter;
+    let data = req.body;
+    console.log('Data Received: ' + JSON.stringify(data));
+    if('counter' in req.body) {
+        let n = req.body.counter;
         let sum = 0;
         for( let i=1; i<=n; i++ ) {
             sum += i;
@@ -37,7 +47,12 @@ function handleSumOfNIntegers(req, res) {
 }
 
 //Calculate sum of first N integers
-app.get('/GetSum', handleSumOfNIntegers);
+app.post('/GetSum', upload.none(), handleSumOfNIntegers);
+
+app.post('/Demo', (req, res)=> {
+    console.log(req.body);
+    res.send(JSON.stringify(req.body));
+});
 
 // Get Request with Params and JSON Response
 app.get('/search', handleSearchRequest);
